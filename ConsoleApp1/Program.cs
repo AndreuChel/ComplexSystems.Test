@@ -14,21 +14,28 @@ namespace ConsoleApp1
     }
     public enum DateParts { Year, Month, Day, DayWeek, Hour, Minute, Second, Millisecond }
 
-    public abstract class TemplateElement
+    public abstract class TemplateElement { }
+
+    public class Separator : TemplateElement
+    {
+        public string Value { get; set; }
+    }
+
+    public abstract class DatePartTemplateElement : TemplateElement
     {
         public abstract string Template { get; }
         public abstract DateParts DatePart { get; }
     }
 
     [RangeValue(2000,2100)]
-    public class YearElement : TemplateElement
+    public class YearElement : DatePartTemplateElement
     {
         public override DateParts DatePart => DateParts.Year;
         public override string Template => "yyyy";
     }
 
     [RangeValue(1, 12)]
-    public class MonthElement : TemplateElement
+    public class MonthElement : DatePartTemplateElement
     {
         public override DateParts DatePart => DateParts.Month;
         public override string Template => "MM";
