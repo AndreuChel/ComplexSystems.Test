@@ -16,7 +16,7 @@ namespace ConsoleApp1.Classes
 		public ScheduleFormat(string formatString, ScheduleFormatBuilder builder = null)
 		{
 			if (string.IsNullOrEmpty(formatString))
-				throw new ArgumentNullException("formatString cannot be empty!");
+				throw new ArgumentException("Строка, задающая формат не может быть пустой");
 
 			builder = builder ?? ScheduleFormatBuilder.Default;
 

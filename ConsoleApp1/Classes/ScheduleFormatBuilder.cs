@@ -44,8 +44,8 @@ namespace ConsoleApp1.Classes
 					{
 						var currentTemplate = _registerElements.OfType<DatePartTemplateElement>()
 							.FirstOrDefault(templ => templ.Template == buffer.ToString());
-						if (currentTemplate == null)
-							throw new Exception("Invalid format");
+                        if (currentTemplate == null)
+                            throw new Exception($"Ошибка разбора формата \"{formatString}\"");
 						result.Add(currentTemplate);
 						buffer.Clear();
 					}
@@ -56,7 +56,10 @@ namespace ConsoleApp1.Classes
 
 				counter++;
 			}
-			return result;
+            if (result.OfType<DatePartTemplateElement>().GroupBy(elem=>elem.DatePart).Any(g=>g.Count() > 1))
+                throw new Exception($"Ошибка разбора формата \"{formatString}\"");
+
+            return result;
 		}
 		
 	}

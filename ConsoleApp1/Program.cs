@@ -10,7 +10,15 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-	        new Schedule("*.9.*/2 10:00:00");
+            try
+            {
+                new Schedule("*.*.* 1-5 8-17:00:00");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
 	        Console.ReadKey();
         }
     }

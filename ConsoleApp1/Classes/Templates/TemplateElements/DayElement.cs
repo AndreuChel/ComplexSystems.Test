@@ -9,7 +9,8 @@ namespace ConsoleApp1.Classes.Templates.TemplateElements
 	public class DayElement : DatePartTemplateElement
 	{
 		public override DateParts DatePart => DateParts.Day;
-		public override string Template => "dd";
+        public override string Name => "День";
+        public override string Template => "dd";
 		public override int MinValue  => 1;
 		public override int MaxValue => 32;
 	}

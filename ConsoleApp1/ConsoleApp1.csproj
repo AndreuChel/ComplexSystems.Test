@@ -44,7 +44,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\DateParts.cs" />
+    <Compile Include="Classes\ScheduleElements\Elements\IntListScheduleElement.cs" />
+    <Compile Include="Classes\ScheduleElements\Elements\IntRangeScheduleElement.cs" />
+    <Compile Include="Classes\ScheduleElements\Elements\IntScheduleElement.cs" />
     <Compile Include="Classes\ScheduleElements\ScheduleElement.cs" />
+    <Compile Include="Classes\ScheduleElements\ValueParsers\AnyIntParser.cs" />
+    <Compile Include="Classes\ScheduleElements\ValueParsers\IntListParser.cs" />
+    <Compile Include="Classes\ScheduleElements\ValueParsers\IntParser.cs" />
+    <Compile Include="Classes\ScheduleElements\ValueParsers\IntRangeParser.cs" />
+    <Compile Include="Classes\ScheduleElements\ValueParsers\ScheduleElementValueParser.cs" />
     <Compile Include="Classes\ScheduleFormat.cs" />
     <Compile Include="Classes\ScheduleFormatBuilder.cs" />
     <Compile Include="Classes\Templates\TemplateElement.cs" />
