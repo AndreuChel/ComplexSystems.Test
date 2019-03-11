@@ -32,7 +32,8 @@ namespace ConsoleApp1
                 var SupportFormatList = SupportFormats.Select(format => new ScheduleFormat(format)).ToArray();
 
                 var allSeparators = SupportFormatList.SelectMany(el => el.ScheduleItems).OfType<Separator>()
-                .Select(sep => sep.Value).Distinct().ToArray();
+                    .Select(sep => sep.Value).Distinct().ToArray();
+
                 var usedTemplate = SupportFormatList.FirstOrDefault(format => format.IsMatch(scheduleString, allSeparators));
 
                 if (usedTemplate == null)
