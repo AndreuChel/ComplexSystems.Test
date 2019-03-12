@@ -21,7 +21,7 @@ namespace ComplexSystems
             "HH:mm:ss"
         };
 
-        private Dictionary<DateParts, ScheduleElement> ScheduleDict;
+        private readonly Dictionary<DateParts, ScheduleElement> _scheduleDict;
 
         public Schedule(): this("*.*.* * *:*:*.*") { }
 
@@ -29,19 +29,19 @@ namespace ComplexSystems
         {
             try
             {
-                var SupportFormatList = SupportFormats.Select(format => new ScheduleFormat(format)).ToArray();
+                var supportFormatList = SupportFormats.Select(format => new ScheduleFormat(format)).ToArray();
 
-                var allSeparators = SupportFormatList.SelectMany(el => el.ScheduleItems).OfType<Separator>()
+                var allSeparators = supportFormatList.SelectMany(el => el.ScheduleItems).OfType<Separator>()
                     .Select(sep => sep.Value).Distinct().ToArray();
 
-                var usedTemplate = SupportFormatList.FirstOrDefault(format => format.IsMatch(scheduleString, allSeparators));
+                var usedTemplate = supportFormatList.FirstOrDefault(format => format.IsMatch(scheduleString, allSeparators));
 
                 if (usedTemplate == null)
                     throw new ArgumentException($"Не определен формат");
 			
                 var usedTemplateElements = usedTemplate.ScheduleItems.OfType<DatePartTemplateElement>().ToArray();
 
-                ScheduleDict = scheduleString.Split(allSeparators)
+                _scheduleDict = scheduleString.Split(allSeparators)
                     .Select((te, index) => ScheduleElement.GetValue(usedTemplateElements[index], te)).ToArray()
                     .ToDictionary(se => se.ParentTemplate.DatePart, se => se);
             }
@@ -50,5 +50,17 @@ namespace ComplexSystems
                 throw new ArgumentException($"Ошибка создания расписания \"{scheduleString}\". {ex.Message}");
             }
         }
+
+        /// <summary>
+        /// Возвращает следующий ближайший к заданному времени момент в расписании или
+        /// само заданное время, если оно есть в расписании.
+        /// </summary>
+        /// <param name="t1">Заданное время</param>
+        /// <returns>Ближайший момент времени в расписании</returns>
+        public DateTime NearestEvent(DateTime t1)
+        {
+	        throw new NotImplementedException();
+        }
+
     }
 }

@@ -21,5 +21,14 @@ namespace ComplexSystems.Classes.ScheduleElements.Elements
             Step = step;
         }
 
+        public override int Next(int value)
+        {
+	        var result = value +  (value - MinValue) % Step;
+	        if (result < MinValue || result > MaxValue)
+		        result = MinValue;
+
+	        return result;
+        }
+
     }
 }

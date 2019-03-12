@@ -25,12 +25,14 @@ namespace ComplexSystems.Classes.ScheduleElements
             return valueParser.GetValue(template, valueString);
         }
 
-        public ScheduleElement(DatePartTemplateElement template)
+        protected ScheduleElement(DatePartTemplateElement template)
         {
             ParentTemplate = template;
         }
 
         public DatePartTemplateElement ParentTemplate { get; private set; }
+
+        public abstract int Next(int value);
 
     }
 

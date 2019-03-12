@@ -16,5 +16,17 @@ namespace ComplexSystems.Classes.ScheduleElements.Elements
         {
             IntListItems = elements.ToList();
         }
+
+        public override int Next(int value)
+        {
+
+	        var allNext =  IntListItems.Select(item => item.Next(value)).Where(val => val > value).OrderBy(val=>val).ToArray();
+
+	        if (!allNext.Any())
+		        return ParentTemplate.MinValue;
+			
+	        return allNext.DefaultIfEmpty(allNext[0]).FirstOrDefault(val => val > value);
+        }
+
     }
 }
