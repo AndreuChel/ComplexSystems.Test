@@ -10,5 +10,4 @@ namespace ComplexSystems.Classes.Templates.TemplateElements
 	{
 		public char Value { get; set; }
 	}
-
 }

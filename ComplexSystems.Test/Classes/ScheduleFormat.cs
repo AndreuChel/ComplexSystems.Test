@@ -8,22 +8,31 @@ using ComplexSystems.Classes.Templates.TemplateElements;
 
 namespace ComplexSystems.Classes
 {
+    /// <summary>
+    /// Класс формата для расписания
+    /// </summary>
 	public class ScheduleFormat
 	{
 		public string FormatString { get; }
 		public List<TemplateElement> ScheduleItems { get; }
         
-		public ScheduleFormat(string formatString, ScheduleFormatBuilder builder = null)
+		public ScheduleFormat(string formatString, ScheduleFormatParser builder = null)
 		{
 			if (string.IsNullOrEmpty(formatString))
 				throw new ArgumentException("Строка, задающая формат не может быть пустой");
 
-			builder = builder ?? ScheduleFormatBuilder.Default;
+			builder = builder ?? ScheduleFormatParser.Default;
 
 			FormatString = formatString;
 			ScheduleItems = builder.Parse(FormatString)?.ToList() ?? new List<TemplateElement>();
 		}
-
+        
+        /// <summary>
+        /// Проверка соответствия строки расписания текущему шаблону
+        /// </summary>
+        /// <param name="scheduleString">строка расписания</param>
+        /// <param name="allSeparators">общий массив символов-разделителей</param>
+        /// <returns></returns>
 		public bool IsMatch(string scheduleString, IEnumerable<char> allSeparators)
 		{
 			var tempalteSeparators = ScheduleItems.OfType<Separator>().Select(s => s.Value).ToArray();

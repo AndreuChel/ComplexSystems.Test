@@ -8,22 +8,29 @@ using ComplexSystems.Classes.Templates.TemplateElements;
 
 namespace ComplexSystems.Classes
 {
-	public class ScheduleFormatBuilder
+    /// <summary>
+    /// Вспомогательный класс для парсинга формата расписания
+    /// </summary>
+	public class ScheduleFormatParser
 	{
-		public static ScheduleFormatBuilder Default => 
-			new ScheduleFormatBuilder()
+        /// <summary> Типовой парсер </summary>
+		public static ScheduleFormatParser Default => 
+			new ScheduleFormatParser()
 				.RegisterElement(new Separator()).RegisterElement(new YearElement()).RegisterElement(new MonthElement())
 				.RegisterElement(new DayWeekElement()).RegisterElement(new DayElement()).RegisterElement(new HourElement())
 				.RegisterElement(new MinuteElement()).RegisterElement(new SecondElement()).RegisterElement(new MillisecondElement());
 
-		private readonly List<TemplateElement> _registerElements = new List<TemplateElement>();
+		readonly List<TemplateElement> _registerElements = new List<TemplateElement>();
 
-		public ScheduleFormatBuilder RegisterElement(TemplateElement element)
+        public ScheduleFormatParser RegisterElement(TemplateElement element)
 		{
 			_registerElements.Add(element);
 			return this;
 		}
 
+        /// <summary>
+        /// Разбор строки формата для расписания
+        /// </summary>
 		public IEnumerable<TemplateElement> Parse(string formatString)
 		{
 			var usedSymbols = string.Join("", _registerElements.OfType<DatePartTemplateElement>().SelectMany(el => el.Template)).Distinct().ToArray();

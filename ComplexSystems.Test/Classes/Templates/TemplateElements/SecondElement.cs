@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace ComplexSystems.Classes.Templates.TemplateElements
 {
-
 	public class SecondElement : DatePartTemplateElement
 	{
 		public override DateParts DatePart => DateParts.Second;

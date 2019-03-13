@@ -20,7 +20,7 @@ namespace ComplexSystems.Classes.ScheduleElements.Elements
         public override int Next(int value)
         {
 
-	        var allNext =  IntListItems.Select(item => item.Next(value)).Where(val => val > value).OrderBy(val=>val).ToArray();
+	        var allNext =  IntListItems.Select(item => item.Next(value)).Where(val => val >= value).OrderBy(val=>val).ToArray();
 
 	        if (!allNext.Any())
 		        return ParentTemplate.MinValue;
