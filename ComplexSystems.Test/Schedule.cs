@@ -126,7 +126,6 @@ namespace ComplexSystems
                         .AddSeconds(1);
 			        continue;
 		        }
-		        result = new DateTime(result.Year, result.Month, result.Day, result.Hour, result.Minute, result.Second, msNew);
 		        
 		        //секунды
 		        var s = result.Second;
@@ -137,7 +136,6 @@ namespace ComplexSystems
                         .AddMinutes(s > sNew ? 1 : 0);
 			        continue;
 		        }
-		        result = new DateTime(result.Year, result.Month, result.Day, result.Hour, result.Minute, sNew, result.Millisecond);
 
 		        //минуты
 		        var m = result.Minute;
@@ -148,7 +146,6 @@ namespace ComplexSystems
                         .AddHours(m > mNew ? 1 : 0);
 			        continue;
 		        }
-		        result = new DateTime(result.Year, result.Month, result.Day, result.Hour, mNew, result.Second, result.Millisecond);
 
 		        //часы
 		        var h = result.Hour;
@@ -159,13 +156,14 @@ namespace ComplexSystems
                         .AddDays(h > hNew ? 1 : 0);
 			        continue;
 		        } 
-                result = new DateTime(result.Year, result.Month, result.Day, hNew, result.Minute, result.Second, result.Millisecond);
 
 		        //дни
 		        var d = result.Day;
 		        var dNew = _schedule[DateParts.Day].Next(d);
-                
-                dNew = dNew == 32 ? DateTime.DaysInMonth(result.Year, result.Month) : dNew;
+
+                var lastMonthDay = DateTime.DaysInMonth(result.Year, result.Month);
+                dNew = dNew == 32 ? lastMonthDay : dNew;
+                dNew = dNew > lastMonthDay ? 1 : dNew;
 
                 if (d != dNew)
 		        {
@@ -173,7 +171,6 @@ namespace ComplexSystems
                         .AddMonths(d > dNew ? 1 : 0);
 			        continue;
 		        }
-		        result = new DateTime(result.Year, result.Month, dNew, result.Hour, result.Minute, result.Second, result.Millisecond);
 
                 //дни недели
                 var dn = (int)result.DayOfWeek;
@@ -193,7 +190,6 @@ namespace ComplexSystems
                         .AddYears(month > monthNew ? 1 : 0);
 			        continue;
 		        }
-		        result = new DateTime(result.Year, monthNew, result.Day, result.Hour, result.Minute, result.Second, result.Millisecond);
 
                 //годы
                 var year = result.Year;
@@ -207,7 +203,6 @@ namespace ComplexSystems
                     result = new DateTime(yearNew,1,1,0,0,0,0);
                     continue;
                 }
-                result = new DateTime(yearNew, monthNew, result.Day, result.Hour, result.Minute, result.Second, result.Millisecond);
 
 		        done = true;
 	        }

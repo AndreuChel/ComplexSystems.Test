@@ -14,10 +14,8 @@ namespace ComplexSystems
             {
                 var tests = new List<ScheduleTest>
                 {
-                    new ScheduleTest("*.*.31 00:00:00")
-                        .TestNearestEvent("01.02.2019 19:45:39","28.02.2019 0:00:00")
 
-                  , new ScheduleTest("*:*:00")
+                    new ScheduleTest("*:*:00")
                         .TestNearestEvent("01.01.2019 19:45:39","01.01.2019 19:46:00")
                         .TestNextEvent("01.01.2019 19:45:39","01.01.2019 19:46:00")
                         .TestNextEvent("01.01.2019 19:46:00","01.01.2019 19:47:00")
@@ -33,6 +31,13 @@ namespace ComplexSystems
                         .TestNearestEvent("01.01.2019 19:45:39.555","01.01.2019 19:45:39.555")
                         .TestNextEvent("01.01.2019 19:45:39.555","01.01.2019 19:45:39.556")
                         .TestNextEvent("01.01.2019 23:59:59.999","02.01.2019 00:00:00.000")
+
+                  , new ScheduleTest("*.*.32 00:00:00")
+                        .TestNearestEvent("01.02.2019 19:45:39","28.02.2019 0:00:00")
+
+                  , new ScheduleTest("*.*.31 00:00:00")
+                        .TestNearestEvent("01.02.2019 19:45:39","31.03.2019 0:00:00")
+
 
 
                   , new ScheduleTest("*.1,2,7-12.* 8-17/4:*:00")
