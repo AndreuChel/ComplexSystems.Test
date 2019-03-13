@@ -25,7 +25,7 @@ namespace ComplexSystems.Classes.ScheduleElements.Elements
 	        if (!allNext.Any())
 		        return ParentTemplate.MinValue;
 			
-	        return allNext.DefaultIfEmpty(allNext[0]).FirstOrDefault(val => val > value);
+	        return allNext.DefaultIfEmpty(allNext[0]).FirstOrDefault(val => val >= value);
         }
 
     }

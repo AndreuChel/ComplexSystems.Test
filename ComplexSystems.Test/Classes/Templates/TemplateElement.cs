@@ -6,8 +6,5 @@ using System.Threading.Tasks;
 
 namespace ComplexSystems.Classes.Templates
 {
-	public abstract class TemplateElement
-	{
-
-	}
+	public abstract class TemplateElement { }
 }

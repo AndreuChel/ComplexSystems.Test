@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace ComplexSystems.Classes
 {
-	public enum DateParts { Year, Month, Day, DayWeek, Hour, Minute, Second, Millisecond }
+	public enum DateParts { Millisecond, Second, Minute, Hour, DayWeek, Day, Month, Year }
 
 }

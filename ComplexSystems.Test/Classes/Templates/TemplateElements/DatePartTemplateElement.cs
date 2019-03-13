@@ -8,11 +8,16 @@ namespace ComplexSystems.Classes.Templates.TemplateElements
 {
 	public abstract class DatePartTemplateElement : TemplateElement
 	{
-        public abstract string Name { get; }
-        public abstract string Template { get; }
+		public abstract string Name { get; }
+
+		public abstract string Template { get; }
+
 		public abstract DateParts DatePart { get; }
+
 		public abstract int MinValue { get; }
 		public abstract int MaxValue { get; }
+
+		public virtual string DefaultValue => "*";
 
 		public virtual int GetValue(string valueString)
 		{

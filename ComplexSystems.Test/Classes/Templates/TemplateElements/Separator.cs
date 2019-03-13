@@ -8,8 +8,7 @@ namespace ComplexSystems.Classes.Templates.TemplateElements
 {
 	public class Separator : TemplateElement
 	{
-		public Char Value { get; set; }
-
+		public char Value { get; set; }
 	}
 
 }

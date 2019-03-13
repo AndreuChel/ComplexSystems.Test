@@ -25,6 +25,10 @@ namespace ComplexSystems.Classes.ScheduleElements
             return valueParser.GetValue(template, valueString);
         }
 
+        public static ScheduleElement GetDefaultValue(DatePartTemplateElement template)
+	        => GetValue(template, template.DefaultValue);
+
+
         protected ScheduleElement(DatePartTemplateElement template)
         {
             ParentTemplate = template;

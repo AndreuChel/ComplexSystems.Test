@@ -23,7 +23,7 @@ namespace ComplexSystems.Classes.ScheduleElements.Elements
 
         public override int Next(int value)
         {
-	        var result = value +  (value - MinValue) % Step;
+	        var result = Enumerable.Range(0, int.MaxValue).Select(i => MinValue + Step * i).First(nv => nv >= value);
 	        if (result < MinValue || result > MaxValue)
 		        result = MinValue;
 
