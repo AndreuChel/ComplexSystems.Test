@@ -81,6 +81,7 @@ namespace ComplexSystems
 					 .Select(sep => sep.Value).Distinct().ToArray();
 				var allTemplateElements = supportFormatList.SelectMany(el => el.ScheduleItems).OfType<DatePartTemplateElement>().ToArray();
 
+				//Поиск подходящего к scheduleString шаблона
 				var usedTemplate = supportFormatList.FirstOrDefault(format => format.IsMatch(scheduleString, allSeparators));
 
 				if (usedTemplate == null)
