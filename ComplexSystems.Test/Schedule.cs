@@ -14,15 +14,14 @@ namespace ComplexSystems
 	/// </summary>
 	public class Schedule
 	{
-		private static readonly List<string> SupportFormats = new List<string>
-		  {
+		private static readonly List<string> SupportFormats = new List<string> {
 				"yyyy.MM.dd w HH:mm:ss.fff",
 				"yyyy.MM.dd HH:mm:ss.fff",
 				"HH:mm:ss.fff",
 				"yyyy.MM.dd w HH:mm:ss",
 				"yyyy.MM.dd HH:mm:ss",
 				"HH:mm:ss"
-		  };
+		};
 
 		private readonly Dictionary<DateParts, ScheduleElement> _schedule;
 
@@ -230,7 +229,7 @@ namespace ComplexSystems
 				if (ms != msNew)
 				{
 					result = new DateTime(result.Year, result.Month, result.Day, result.Hour, result.Minute, result.Second, msNew > ms ? 999 : msNew)
-						.AddSeconds( msNew > ms ? -1 : 0);
+						.AddSeconds(msNew > ms ? -1 : 0);
 					continue;
 				}
 
@@ -240,7 +239,7 @@ namespace ComplexSystems
 				if (s != sNew)
 				{
 					result = new DateTime(result.Year, result.Month, result.Day, result.Hour, result.Minute, sNew > s ? 59 : sNew, 999)
-						.AddMinutes( sNew > s ? -1 : 0);
+						.AddMinutes(sNew > s ? -1 : 0);
 					continue;
 				}
 
@@ -250,7 +249,7 @@ namespace ComplexSystems
 				if (m != mNew)
 				{
 					result = new DateTime(result.Year, result.Month, result.Day, result.Hour, mNew > m ? 59 : mNew, 59, 999)
-						.AddHours( mNew > m ? -1 : 0);
+						.AddHours(mNew > m ? -1 : 0);
 					continue;
 				}
 
@@ -259,8 +258,8 @@ namespace ComplexSystems
 				var hNew = _schedule[DateParts.Hour].Prev(h);
 				if (h != hNew)
 				{
-					result = new DateTime(result.Year, result.Month, result.Day, hNew > h ? 23 : hNew, 59, 59,999)
-						.AddDays( hNew > h ? -1 : 0);
+					result = new DateTime(result.Year, result.Month, result.Day, hNew > h ? 23 : hNew, 59, 59, 999)
+						.AddDays(hNew > h ? -1 : 0);
 					continue;
 				}
 
@@ -273,11 +272,11 @@ namespace ComplexSystems
 
 				if (d != dNew)
 				{
-					result = new DateTime(result.Year, result.Month, dNew > d ? 1 : dNew, 23, 59,59,999)
+					result = new DateTime(result.Year, result.Month, dNew > d ? 1 : dNew, 23, 59, 59, 999)
 						.AddMonths(dNew > d ? -1 : 0);
 
 					if (dNew > d)
-						result = result.AddDays(DateTime.DaysInMonth(result.Year, result.Month)-1);
+						result = result.AddDays(DateTime.DaysInMonth(result.Year, result.Month) - 1);
 
 					continue;
 				}
@@ -288,7 +287,7 @@ namespace ComplexSystems
 				if (dn != dnNew)
 				{
 					var dayDiff = dnNew > dn ? 7 + dn - dnNew - dn : dn - dnNew;
-					result = new DateTime(result.Year, result.Month, result.Day,23,59,59,999).AddDays(-1*dayDiff);
+					result = new DateTime(result.Year, result.Month, result.Day, 23, 59, 59, 999).AddDays(-1 * dayDiff);
 					continue;
 				}
 
@@ -300,7 +299,7 @@ namespace ComplexSystems
 					result = new DateTime(result.Year, monthNew > month ? 1 : monthNew, 1, 23, 59, 59, 999)
 						.AddYears(monthNew > month ? -1 : 0);
 
-					result = result.AddDays(DateTime.DaysInMonth(result.Year, result.Month)-1);
+					result = result.AddDays(DateTime.DaysInMonth(result.Year, result.Month) - 1);
 					continue;
 				}
 
@@ -314,7 +313,7 @@ namespace ComplexSystems
 				if (yearNew < year)
 				{
 					result = new DateTime(yearNew, 12, 1, 23, 59, 59, 999);
-					result = result.AddDays(DateTime.DaysInMonth(result.Year, result.Month)-1);
+					result = result.AddDays(DateTime.DaysInMonth(result.Year, result.Month) - 1);
 					continue;
 				}
 				done = true;

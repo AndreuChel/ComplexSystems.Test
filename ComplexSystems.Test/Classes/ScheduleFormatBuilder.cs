@@ -36,8 +36,8 @@ namespace ComplexSystems.Classes
 			var usedSymbols = string.Join("", _registerElements.OfType<DatePartTemplateElement>().SelectMany(el => el.Template)).Distinct().ToArray();
 
 			var result = new List<TemplateElement>();
-			int counter = 0;
-			StringBuilder buffer = new StringBuilder();
+			var counter = 0;
+			var buffer = new StringBuilder();
 
 			foreach (var ch in formatString)
 			{
