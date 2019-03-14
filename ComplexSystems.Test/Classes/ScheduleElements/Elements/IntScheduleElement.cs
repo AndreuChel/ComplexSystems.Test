@@ -17,5 +17,7 @@ namespace ComplexSystems.Classes.ScheduleElements.Elements
 		}
 
 		public override int Next(int value) => Value;
+
+		public override int Prev(int value) => Value;
 	}
 }

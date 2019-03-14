@@ -39,6 +39,8 @@ namespace ComplexSystems.Classes.ScheduleElements
 
 		public abstract int Next(int value);
 
+		public abstract int Prev(int value);
+
 	}
 
 

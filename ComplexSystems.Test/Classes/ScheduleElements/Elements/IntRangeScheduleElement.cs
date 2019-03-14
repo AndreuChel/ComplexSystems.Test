@@ -30,5 +30,19 @@ namespace ComplexSystems.Classes.ScheduleElements.Elements
 			return result;
 		}
 
+		
+		public override int Prev(int value)
+		{
+			var maxRangeValue = MaxValue - (MaxValue - MinValue) % Step;
+
+			var result = maxRangeValue;
+			if (value >= MinValue && value <= maxRangeValue)
+			{
+				result = Enumerable.Range(0, Step).Select(s => value - s).First(val => val % Step == 0);
+			}
+
+			return result;
+		}
+
 	}
 }

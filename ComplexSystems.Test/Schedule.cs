@@ -213,12 +213,131 @@ namespace ComplexSystems
 		}
 
 		/// <summary>
+		/// Возвращает предыдущий ближайший к заданному времени момент в расписании или
+		/// само заданное время, если оно есть в расписании.
+		/// </summary>
+		/// <param name="t1">Заданное время</param>
+		/// <returns>Ближайший момент времени в расписании</returns>
+		public DateTime NearestPrevEvent(DateTime t1)
+		{
+			var result = new DateTime(t1.Year, t1.Month, t1.Day, t1.Hour, t1.Minute, t1.Second, t1.Millisecond);
+			var done = false;
+			while (!done)
+			{
+				//миллисекунды
+				var ms = result.Millisecond;
+				var msNew = _schedule[DateParts.Millisecond].Prev(ms);
+				if (ms != msNew)
+				{
+					result = new DateTime(result.Year, result.Month, result.Day, result.Hour, result.Minute, result.Second, msNew > ms ? 999 : msNew)
+						.AddSeconds( msNew > ms ? -1 : 0);
+					continue;
+				}
+
+				//секунды
+				var s = result.Second;
+				var sNew = _schedule[DateParts.Second].Prev(s);
+				if (s != sNew)
+				{
+					result = new DateTime(result.Year, result.Month, result.Day, result.Hour, result.Minute, sNew > s ? 59 : sNew, 999)
+						.AddMinutes( sNew > s ? -1 : 0);
+					continue;
+				}
+
+				//Минуты
+				var m = result.Minute;
+				var mNew = _schedule[DateParts.Minute].Prev(m);
+				if (m != mNew)
+				{
+					result = new DateTime(result.Year, result.Month, result.Day, result.Hour, mNew > m ? 59 : mNew, 59, 999)
+						.AddHours( mNew > m ? -1 : 0);
+					continue;
+				}
+
+				//Часы
+				var h = result.Hour;
+				var hNew = _schedule[DateParts.Hour].Prev(h);
+				if (h != hNew)
+				{
+					result = new DateTime(result.Year, result.Month, result.Day, hNew > h ? 23 : hNew, 59, 59,999)
+						.AddDays( hNew > h ? -1 : 0);
+					continue;
+				}
+
+				//Дни
+				var d = result.Day;
+				var dNew = _schedule[DateParts.Day].Prev(d);
+
+				var lastMonthDay = DateTime.DaysInMonth(result.Year, result.Month);
+				dNew = dNew == 32 ? lastMonthDay : dNew;
+
+				if (d != dNew)
+				{
+					result = new DateTime(result.Year, result.Month, dNew > d ? 1 : dNew, 23, 59,59,999)
+						.AddMonths(dNew > d ? -1 : 0);
+
+					if (dNew > d)
+						result = result.AddDays(DateTime.DaysInMonth(result.Year, result.Month)-1);
+
+					continue;
+				}
+
+				//дни недели
+				var dn = (int)result.DayOfWeek;
+				var dnNew = _schedule[DateParts.DayWeek].Prev(dn);
+				if (dn != dnNew)
+				{
+					var dayDiff = dnNew > dn ? 7 + dn - dnNew - dn : dn - dnNew;
+					result = new DateTime(result.Year, result.Month, result.Day,23,59,59,999).AddDays(-1*dayDiff);
+					continue;
+				}
+
+				//месяцы
+				var month = result.Month;
+				var monthNew = _schedule[DateParts.Month].Prev(month);
+				if (month != monthNew)
+				{
+					result = new DateTime(result.Year, monthNew > month ? 1 : monthNew, 1, 23, 59, 59, 999)
+						.AddYears(monthNew > month ? -1 : 0);
+
+					result = result.AddDays(DateTime.DaysInMonth(result.Year, result.Month)-1);
+					continue;
+				}
+
+				//годы
+				var year = result.Year;
+				var yearNew = _schedule[DateParts.Year].Prev(year);
+
+				if (yearNew > year)
+					return DateTime.MaxValue;
+
+				if (yearNew < year)
+				{
+					result = new DateTime(yearNew, 12, 1, 23, 59, 59, 999);
+					result = result.AddDays(DateTime.DaysInMonth(result.Year, result.Month)-1);
+					continue;
+				}
+				done = true;
+			}
+
+			return result;
+		}
+
+		/// <summary>
 		/// Возвращает следующий момент времени в расписании.
 		/// </summary>
 		/// <param name="t1">Время, от которого нужно отступить</param>
 		/// <returns>Следующий момент времени в расписании</returns>
 		public DateTime NextEvent(DateTime t1)
 			 => NearestEvent(t1.AddMilliseconds(1));
+
+		/// <summary>
+		/// Возвращает предыдущий момент времени в расписании.
+		/// </summary>
+		/// <param name="t1">Время, от которого нужно отступить</param>
+		/// <returns>Предыдущий момент времени в расписании</returns>
+		public DateTime PrevEvent(DateTime t1)
+			=> NearestPrevEvent(t1.AddMilliseconds(-1));
 
 	}
 }

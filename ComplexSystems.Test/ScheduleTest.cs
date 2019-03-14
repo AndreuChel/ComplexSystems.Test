@@ -38,8 +38,8 @@ namespace ComplexSystems
 			if (!_isValid) return this;
 
 			var result = _schedule.NearestEvent(DateTime.Parse(srcTime)) == DateTime.Parse(nextTime);
+			ResultList.Add($" NearestEvent:     {srcTime} ==> {nextTime}\t\t{(result ? "OK" : "Fail")}");
 
-			ResultList.Add($" NearestEvent: {srcTime} ==> {nextTime}\t\t{(result ? "OK" : "Fail")}");
 			return this;
 		}
 
@@ -48,10 +48,32 @@ namespace ComplexSystems
 			if (!_isValid) return this;
 
 			var result = _schedule.NextEvent(DateTime.Parse(srcTime)) == DateTime.Parse(nextTime);
+			ResultList.Add($" NextEvent:        {srcTime} ==> {nextTime}\t\t{(result ? "OK" : "Fail")}");
 
-			ResultList.Add($" NextEvent:    {srcTime} ==> {nextTime}\t\t{(result ? "OK" : "Fail")}");
 			return this;
 		}
+
+		public ScheduleTest TestNearestPrevEvent(string srcTime, string prevTime)
+		{
+			if (!_isValid) return this;
+
+			var result = _schedule.NearestPrevEvent(DateTime.Parse(srcTime)) == DateTime.Parse(prevTime);
+			ResultList.Add($" NearestPrevEvent: {srcTime} ==> {prevTime}\t\t{(result ? "OK" : "Fail")}");
+
+			return this;
+
+		}
+		public ScheduleTest TestPrevEvent(string srcTime, string prevTime)
+		{
+			if (!_isValid) return this;
+
+			var result = _schedule.PrevEvent(DateTime.Parse(srcTime)) == DateTime.Parse(prevTime);
+			ResultList.Add($" PrevEvent:        {srcTime} ==> {prevTime}\t\t{(result ? "OK" : "Fail")}");
+
+			return this;
+
+		}
+		
 
 		public void PrintResult()
 		{

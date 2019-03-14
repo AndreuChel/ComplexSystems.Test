@@ -19,13 +19,23 @@ namespace ComplexSystems.Classes.ScheduleElements.Elements
 
 		public override int Next(int value)
 		{
-
 			var allNext = _intListItems.Select(item => item.Next(value)).Where(val => val >= value).OrderBy(val => val).ToArray();
 
 			if (!allNext.Any())
 				return ParentTemplate.MinValue;
 
-			return allNext.DefaultIfEmpty(allNext[0]).FirstOrDefault(val => val >= value);
+			return allNext.ElementAt(0);
+		}
+
+		public override int Prev(int value)
+		{
+
+			var allPrev = _intListItems.Select(item => item.Prev(value)).Where(val => val <= value).OrderByDescending(val => val).ToArray();
+
+			if (!allPrev.Any())
+				return ParentTemplate.MaxValue;
+
+			return allPrev.ElementAt(0);
 		}
 
 	}
