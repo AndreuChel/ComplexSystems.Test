@@ -22,8 +22,8 @@ namespace ComplexSystems.Classes.Templates.TemplateElements
 		public virtual int GetValue(string valueString)
 		{
 			var digits = "0123456789".ToCharArray();
-            if (valueString.Any(ch => !digits.Contains(ch)))
-                throw new ArgumentException($"Неверный формат параметра \"{Name}\"");
+			if (valueString.Any(ch => !digits.Contains(ch)))
+				throw new ArgumentException($"Неверный формат параметра \"{Name}\"");
 
 			var result = int.Parse(valueString);
 			if (result < MinValue || result > MaxValue)

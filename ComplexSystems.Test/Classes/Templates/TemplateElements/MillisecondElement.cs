@@ -11,9 +11,9 @@ namespace ComplexSystems.Classes.Templates.TemplateElements
 		public override DateParts DatePart => DateParts.Millisecond;
 		public override string Name => "Миллисекунда";
 		public override string Template => "fff";
-		public override int MinValue  => 0;
+		public override int MinValue => 0;
 		public override int MaxValue => 999;
 		public override string DefaultValue => "0";
-		
+
 	}
 }

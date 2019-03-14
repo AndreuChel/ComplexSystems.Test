@@ -11,7 +11,7 @@ namespace ComplexSystems.Classes.Templates.TemplateElements
 		public override DateParts DatePart => DateParts.Minute;
 		public override string Name => "Минута";
 		public override string Template => "mm";
-		public override int MinValue  => 0;
+		public override int MinValue => 0;
 		public override int MaxValue => 59;
 
 	}

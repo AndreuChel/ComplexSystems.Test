@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace ComplexSystems.Classes.ScheduleElements.Elements
 {
-    public class IntScheduleElement : ScheduleElement
-    {
-        private int Value { get; set; }
-        public IntScheduleElement(DatePartTemplateElement template, int value) 
-            : base(template)
-        {
-            Value = value;
-        }
+	public class IntScheduleElement : ScheduleElement
+	{
+		private int Value { get; set; }
+		public IntScheduleElement(DatePartTemplateElement template, int value)
+			 : base(template)
+		{
+			Value = value;
+		}
 
-        public override int Next(int value) => Value;
-    }
+		public override int Next(int value) => Value;
+	}
 }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ComplexSystems.Classes.Templates
 {
-    /// <summary>
-    /// Базовый класс для всех элеметов шаблона расписания
-    /// </summary>
+	/// <summary>
+	/// Базовый класс для всех элементов шаблона расписания
+	/// </summary>
 	public abstract class TemplateElement { }
 }

@@ -12,7 +12,7 @@ namespace ComplexSystems.Classes.Templates.TemplateElements
 		public override DateParts DatePart => DateParts.Year;
 		public override string Name => "Год";
 		public override string Template => "yyyy";
-		public override int MinValue  => 2000;
+		public override int MinValue => 2000;
 		public override int MaxValue => 2100;
 	}
 

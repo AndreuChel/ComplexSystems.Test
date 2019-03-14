@@ -9,30 +9,30 @@ using ComplexSystems.Classes.Templates.TemplateElements;
 
 namespace ComplexSystems
 {
-    /// <summary>
+	/// <summary>
 	/// Класс для задания и расчета времени по расписанию.
 	/// </summary>
-    public class Schedule
-    {
-        private static readonly List<string> SupportFormats = new List<string>
-        {
-            "yyyy.MM.dd w HH:mm:ss.fff",
-            "yyyy.MM.dd HH:mm:ss.fff",
-            "HH:mm:ss.fff",
-            "yyyy.MM.dd w HH:mm:ss",
-            "yyyy.MM.dd HH:mm:ss",
-            "HH:mm:ss"
-        };
+	public class Schedule
+	{
+		private static readonly List<string> SupportFormats = new List<string>
+		  {
+				"yyyy.MM.dd w HH:mm:ss.fff",
+				"yyyy.MM.dd HH:mm:ss.fff",
+				"HH:mm:ss.fff",
+				"yyyy.MM.dd w HH:mm:ss",
+				"yyyy.MM.dd HH:mm:ss",
+				"HH:mm:ss"
+		  };
 
-        private readonly Dictionary<DateParts, ScheduleElement> _schedule;
+		private readonly Dictionary<DateParts, ScheduleElement> _schedule;
 
-        /// <summary>
+		/// <summary>
 		/// Создает пустой экземпляр, который будет соответствовать
 		/// расписанию типа "*.*.* * *:*:*.*" (раз в 1 мс).
 		/// </summary>
-        public Schedule(): this("*.*.* * *:*:*.*") { }
+		public Schedule() : this("*.*.* * *:*:*.*") { }
 
-        /// <summary>
+		/// <summary>
 		/// Создает экземпляр из строки с представлением расписания.
 		/// </summary>
 		/// <param name="scheduleString">Строка расписания.
@@ -70,27 +70,27 @@ namespace ComplexSystems
 		///     *.*.01 01:30:00
 		///     означает 01:30 по первым числам каждого месяца
 		/// </param>
-        public Schedule(string scheduleString)
-        {
-            scheduleString = scheduleString.Trim();
-            try
-            {
-                var supportFormatList = SupportFormats.Select(format => new ScheduleFormat(format)).ToArray();
+		public Schedule(string scheduleString)
+		{
+			scheduleString = scheduleString.Trim();
+			try
+			{
+				var supportFormatList = SupportFormats.Select(format => new ScheduleFormat(format)).ToArray();
 
-                var allSeparators = supportFormatList.SelectMany(el => el.ScheduleItems).OfType<Separator>()
-                    .Select(sep => sep.Value).Distinct().ToArray();
-                var allTemplateElements = supportFormatList.SelectMany(el => el.ScheduleItems).OfType<DatePartTemplateElement>().ToArray();
+				var allSeparators = supportFormatList.SelectMany(el => el.ScheduleItems).OfType<Separator>()
+					 .Select(sep => sep.Value).Distinct().ToArray();
+				var allTemplateElements = supportFormatList.SelectMany(el => el.ScheduleItems).OfType<DatePartTemplateElement>().ToArray();
 
-                var usedTemplate = supportFormatList.FirstOrDefault(format => format.IsMatch(scheduleString, allSeparators));
+				var usedTemplate = supportFormatList.FirstOrDefault(format => format.IsMatch(scheduleString, allSeparators));
 
-                if (usedTemplate == null)
-                    throw new ArgumentException($"Не определен формат");
-			
-                var usedTemplateElements = usedTemplate.ScheduleItems.OfType<DatePartTemplateElement>().ToArray();
+				if (usedTemplate == null)
+					throw new ArgumentException($"Не определен формат");
 
-                _schedule = scheduleString.Split(allSeparators)
-                    .Select((te, index) => ScheduleElement.GetValue(usedTemplateElements[index], te)).ToArray()
-                    .ToDictionary(se => se.ParentTemplate.DatePart, se => se);
+				var usedTemplateElements = usedTemplate.ScheduleItems.OfType<DatePartTemplateElement>().ToArray();
+
+				_schedule = scheduleString.Split(allSeparators)
+					 .Select((te, index) => ScheduleElement.GetValue(usedTemplateElements[index], te)).ToArray()
+					 .ToDictionary(se => se.ParentTemplate.DatePart, se => se);
 
 				//Для не определенных в шаблоне элементов добавляем значения по умолчанию	
 				((int[])Enum.GetValues(typeof(DateParts)))
@@ -99,126 +99,125 @@ namespace ComplexSystems
 					.ToList()
 					.ForEach(te => _schedule.Add(te.DatePart, ScheduleElement.GetDefaultValue(te)));
 			}
-            catch (ArgumentException ex)
-            {
-                throw new ArgumentException($"Ошибка создания расписания \"{scheduleString}\". {ex.Message}");
-            }
-        }
+			catch (ArgumentException ex)
+			{
+				throw new ArgumentException($"Ошибка создания расписания \"{scheduleString}\". {ex.Message}");
+			}
+		}
 
-        /// <summary>
-        /// Возвращает следующий ближайший к заданному времени момент в расписании или
-        /// само заданное время, если оно есть в расписании.
-        /// </summary>
-        /// <param name="t1">Заданное время</param>
-        /// <returns>Ближайший момент времени в расписании</returns>
-        public DateTime NearestEvent(DateTime t1)
-        {
-	        var result = new DateTime(t1.Year, t1.Month, t1.Day, t1.Hour, t1.Minute, t1.Second, t1.Millisecond);
-	        var done = false;
-	        while (!done)
-	        {
+		/// <summary>
+		/// Возвращает следующий ближайший к заданному времени момент в расписании или
+		/// само заданное время, если оно есть в расписании.
+		/// </summary>
+		/// <param name="t1">Заданное время</param>
+		/// <returns>Ближайший момент времени в расписании</returns>
+		public DateTime NearestEvent(DateTime t1)
+		{
+			var result = new DateTime(t1.Year, t1.Month, t1.Day, t1.Hour, t1.Minute, t1.Second, t1.Millisecond);
+			var done = false;
+			while (!done)
+			{
 				//миллисекунды
-		        var ms = result.Millisecond;
-		        var msNew = _schedule[DateParts.Millisecond].Next(ms);
-		        if (ms > msNew)
-		        {
-			        result = new DateTime(result.Year, result.Month, result.Day, result.Hour, result.Minute, result.Second, 0)
-                        .AddSeconds(1);
-			        continue;
-		        }
-		        
-		        //секунды
-		        var s = result.Second;
-		        var sNew = _schedule[DateParts.Second].Next(s);
-		        if (s != sNew)
-		        {
-			        result = new DateTime(result.Year, result.Month, result.Day, result.Hour, result.Minute, s > sNew ? 0 : sNew, 0)
-                        .AddMinutes(s > sNew ? 1 : 0);
-			        continue;
-		        }
+				var ms = result.Millisecond;
+				var msNew = _schedule[DateParts.Millisecond].Next(ms);
+				if (ms != msNew)
+				{
+					result = new DateTime(result.Year, result.Month, result.Day, result.Hour, result.Minute, result.Second, ms > msNew ? 0 : msNew)
+							 .AddSeconds(ms > msNew ? 1 : 0);
+					continue;
+				}
 
-		        //минуты
-		        var m = result.Minute;
-		        var mNew = _schedule[DateParts.Minute].Next(m);
-		        if (m != mNew)
-		        {
-			        result = new DateTime(result.Year, result.Month, result.Day, result.Hour, m > mNew ? 0 : mNew, 0, 0)
-                        .AddHours(m > mNew ? 1 : 0);
-			        continue;
-		        }
+				//секунды
+				var s = result.Second;
+				var sNew = _schedule[DateParts.Second].Next(s);
+				if (s != sNew)
+				{
+					result = new DateTime(result.Year, result.Month, result.Day, result.Hour, result.Minute, s > sNew ? 0 : sNew, 0)
+							 .AddMinutes(s > sNew ? 1 : 0);
+					continue;
+				}
 
-		        //часы
-		        var h = result.Hour;
-		        var hNew = _schedule[DateParts.Hour].Next(h);
-		        if (h != hNew )
-		        {
-			        result = new DateTime(result.Year, result.Month, result.Day, h > hNew ? 0 : hNew, 0, 0, 0)
-                        .AddDays(h > hNew ? 1 : 0);
-			        continue;
-		        } 
+				//минуты
+				var m = result.Minute;
+				var mNew = _schedule[DateParts.Minute].Next(m);
+				if (m != mNew)
+				{
+					result = new DateTime(result.Year, result.Month, result.Day, result.Hour, m > mNew ? 0 : mNew, 0, 0)
+							 .AddHours(m > mNew ? 1 : 0);
+					continue;
+				}
 
-		        //дни
-		        var d = result.Day;
-		        var dNew = _schedule[DateParts.Day].Next(d);
+				//часы
+				var h = result.Hour;
+				var hNew = _schedule[DateParts.Hour].Next(h);
+				if (h != hNew)
+				{
+					result = new DateTime(result.Year, result.Month, result.Day, h > hNew ? 0 : hNew, 0, 0, 0)
+							 .AddDays(h > hNew ? 1 : 0);
+					continue;
+				}
 
-                var lastMonthDay = DateTime.DaysInMonth(result.Year, result.Month);
-                dNew = dNew == 32 ? lastMonthDay : dNew;
-                dNew = dNew > lastMonthDay ? 1 : dNew;
+				//дни
+				var d = result.Day;
+				var dNew = _schedule[DateParts.Day].Next(d);
 
-                if (d != dNew)
-		        {
-			        result = new DateTime(result.Year, result.Month, d > dNew ? 1 : dNew, 0, 0, 0, 0)
-                        .AddMonths(d > dNew ? 1 : 0);
-			        continue;
-		        }
+				var lastMonthDay = DateTime.DaysInMonth(result.Year, result.Month);
+				dNew = dNew == 32 ? lastMonthDay : dNew;
+				dNew = dNew > lastMonthDay ? 1 : dNew;
 
-                //дни недели
-                var dn = (int)result.DayOfWeek;
-                var dnNew = _schedule[DateParts.DayWeek].Next(dn);
-                if (dn != dnNew) {
-                    var dayDiff = dn < dnNew ? dnNew - dn : 7 - dn + dnNew ;
-                    result = new DateTime(result.Year, result.Month, result.Day).AddDays(dayDiff);
-                    continue;
-                }
+				if (d != dNew)
+				{
+					result = new DateTime(result.Year, result.Month, d > dNew ? 1 : dNew, 0, 0, 0, 0)
+							 .AddMonths(d > dNew ? 1 : 0);
+					continue;
+				}
 
-                //месяцы
-                var month = result.Month;
-		        var monthNew = _schedule[DateParts.Month].Next(month);
-		        if (month != monthNew)
-		        {
-			        result = new DateTime(result.Year, month > monthNew ? 1 : monthNew, 1, 0, 0, 0, 0)
-                        .AddYears(month > monthNew ? 1 : 0);
-			        continue;
-		        }
+				//дни недели
+				var dn = (int)result.DayOfWeek;
+				var dnNew = _schedule[DateParts.DayWeek].Next(dn);
+				if (dn != dnNew)
+				{
+					var dayDiff = dn < dnNew ? dnNew - dn : 7 - dn + dnNew;
+					result = new DateTime(result.Year, result.Month, result.Day).AddDays(dayDiff);
+					continue;
+				}
 
-                //годы
-                var year = result.Year;
-                var yearNew = _schedule[DateParts.Year].Next(year);
+				//месяцы
+				var month = result.Month;
+				var monthNew = _schedule[DateParts.Month].Next(month);
+				if (month != monthNew)
+				{
+					result = new DateTime(result.Year, month > monthNew ? 1 : monthNew, 1, 0, 0, 0, 0)
+							 .AddYears(month > monthNew ? 1 : 0);
+					continue;
+				}
 
-                if (yearNew < year)
-                    return DateTime.MinValue;
+				//годы
+				var year = result.Year;
+				var yearNew = _schedule[DateParts.Year].Next(year);
 
-                if (yearNew > year)
-                {
-                    result = new DateTime(yearNew,1,1,0,0,0,0);
-                    continue;
-                }
+				if (yearNew < year)
+					return DateTime.MinValue;
 
-		        done = true;
-	        }
+				if (yearNew > year)
+				{
+					result = new DateTime(yearNew, 1, 1, 0, 0, 0, 0);
+					continue;
+				}
 
-	        return result;
-        }
+				done = true;
+			}
 
-        /// <summary>
-        /// Возвращает следующий момент времени в расписании.
-        /// </summary>
-        /// <param name="t1">Время, от которого нужно отступить</param>
-        /// <returns>Следующий момент времени в расписании</returns>
-        public DateTime NextEvent(DateTime t1)
-            => NearestEvent(t1.AddMilliseconds(1));
+			return result;
+		}
 
+		/// <summary>
+		/// Возвращает следующий момент времени в расписании.
+		/// </summary>
+		/// <param name="t1">Время, от которого нужно отступить</param>
+		/// <returns>Следующий момент времени в расписании</returns>
+		public DateTime NextEvent(DateTime t1)
+			 => NearestEvent(t1.AddMilliseconds(1));
 
-
-    }
+	}
 }

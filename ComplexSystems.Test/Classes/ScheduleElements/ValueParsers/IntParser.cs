@@ -8,16 +8,16 @@ using ComplexSystems.Classes.Templates.TemplateElements;
 
 namespace ComplexSystems.Classes.ScheduleElements.ValueParsers
 {
-    public class IntParser : ScheduleElementValueParser
-    {
-        public override bool IsMatch(string valueString)
-        {
-            var digits = "0123456789".ToCharArray();
-            return valueString.All(ch => digits.Contains(ch));
-        }
+	public class IntParser : ScheduleElementValueParser
+	{
+		public override bool IsMatch(string valueString)
+		{
+			var digits = "0123456789".ToCharArray();
+			return valueString.All(ch => digits.Contains(ch));
+		}
 
-        public override ScheduleElement GetValue(DatePartTemplateElement template, string valueString)
-            => new IntScheduleElement(template, template.GetValue(valueString));
-        
-    }
+		public override ScheduleElement GetValue(DatePartTemplateElement template, string valueString)
+			 => new IntScheduleElement(template, template.GetValue(valueString));
+
+	}
 }

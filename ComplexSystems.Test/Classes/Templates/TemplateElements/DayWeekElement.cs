@@ -11,7 +11,7 @@ namespace ComplexSystems.Classes.Templates.TemplateElements
 		public override DateParts DatePart => DateParts.DayWeek;
 		public override string Name => "День недели";
 		public override string Template => "w";
-		public override int MinValue  => 0;
+		public override int MinValue => 0;
 		public override int MaxValue => 6;
 
 	}

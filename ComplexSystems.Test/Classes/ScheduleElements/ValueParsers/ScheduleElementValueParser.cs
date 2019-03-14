@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace ComplexSystems.Classes.ScheduleElements.ValueParsers
 {
-    public abstract class ScheduleElementValueParser
-    {
-        public abstract bool IsMatch(string valueString);
+	public abstract class ScheduleElementValueParser
+	{
+		public abstract bool IsMatch(string valueString);
 
-        public abstract ScheduleElement GetValue(DatePartTemplateElement template, string valueString);
-    }
+		public abstract ScheduleElement GetValue(DatePartTemplateElement template, string valueString);
+	}
 }
