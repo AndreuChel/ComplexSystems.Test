@@ -62,6 +62,9 @@ namespace ComplexSystems
 							.TestPrevEvent("31.12.2019 16:59:00","31.12.2019 16:58:00")
 							.TestPrevEvent("31.12.2019 16:00:00","31.12.2019 12:59:00")
 							.TestPrevEvent("01.07.2019 08:00:00","28.02.2019 16:59:00")
+
+					, new ScheduleTest("*.9.*/2 1-5 10:00:00.000")
+						.TestNextEvent("28.2.2019 19:45:39","03.09.2019 10:00:00")
 				};
 
 				tests.ForEach(t => t.PrintResult());
